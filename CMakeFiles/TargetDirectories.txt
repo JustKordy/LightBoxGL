@@ -1,0 +1,3 @@
+/Users/kordys/Desktop/Projects/OpenGL/Project/CMakeFiles/RayTracer.dir
+/Users/kordys/Desktop/Projects/OpenGL/Project/CMakeFiles/edit_cache.dir
+/Users/kordys/Desktop/Projects/OpenGL/Project/CMakeFiles/rebuild_cache.dir
