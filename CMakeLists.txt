@@ -1,23 +1,30 @@
 cmake_minimum_required(VERSION 3.10)
-project(RayTracer)
+project(MyProject)
 
 set(CMAKE_CXX_STANDARD 17)
 
 # Find OpenGL
 find_package(OpenGL REQUIRED)
 
-# Find GLFW
-find_package(glfw3 REQUIRED)
-
-# Manually specify GLEW paths for Apple Silicon
-set(GLEW_INCLUDE_DIRS "/opt/homebrew/include")
-set(GLEW_LIBRARIES "/opt/homebrew/lib/libGLEW.dylib")
-
-# Include directories
-include_directories(${OPENGL_INCLUDE_DIRS} ${GLFW3_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS})
+# GLFW and GLEW
+if(WIN32)
+    # Use vcpkg
+    set(VCPKG_PATH "C:\\Users\\Kordys\\Desktop\\All\\vcpkg\\vcpkg\\installed\\x64-windows")
+    include_directories(${VCPKG_PATH}/include)
+    link_directories(${VCPKG_PATH}/lib)
+    set(GLFW_LIB glfw3dll.lib)
+    set(GLEW_LIB glew32.lib)
+elseif(APPLE)
+    # Use Homebrew
+    set(HOMEBREW_PATH "/opt/homebrew")
+    include_directories(${HOMEBREW_PATH}/include)
+    link_directories(${HOMEBREW_PATH}/lib)
+    set(GLFW_LIB glfw)
+    set(GLEW_LIB glew)
+endif()
 
 # Add executable
-add_executable(RayTracer src/main.cpp)
+add_executable(MyProject src/main.cpp)
 
 # Link libraries
-target_link_libraries(RayTracer ${OPENGL_LIBRARIES} glfw ${GLEW_LIBRARIES})
+target_link_libraries(MyProject OpenGL::GL ${GLFW_LIB} ${GLEW_LIB})
