@@ -18,6 +18,8 @@ int main()
     }
     glfwMakeContextCurrent(window);
 
+   
+
     while (!glfwWindowShouldClose(window))
     {
         glfwSwapBuffers(window);
