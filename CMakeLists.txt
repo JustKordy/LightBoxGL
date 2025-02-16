@@ -14,6 +14,7 @@ if(WIN32)
     link_directories(${VCPKG_PATH}/lib)
     set(GLFW_LIB glfw3dll.lib)
     set(GLEW_LIB glew32.lib)
+    
 elseif(APPLE)
     # Use Homebrew
     set(HOMEBREW_PATH "/opt/homebrew")
@@ -24,7 +25,13 @@ elseif(APPLE)
 endif()
 
 # Add executable
-add_executable(MyProject src/main.cpp)
+add_executable(MyProject
+    src/main.cpp
+    src/Shader/Shader.cpp
+    
+    
+)
+
 
 # Link libraries
 target_link_libraries(MyProject OpenGL::GL ${GLFW_LIB} ${GLEW_LIB})
