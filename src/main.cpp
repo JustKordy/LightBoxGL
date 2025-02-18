@@ -59,7 +59,7 @@ int main()
     // Initialize GLEW to setup the OpenGL Function pointers
     glewInit();
 
-    // Define the viewport dimensions
+    // Define the viewport dimensions   
     int viewportWidth, viewportHeight;
     glfwGetFramebufferSize(window, &viewportWidth, &viewportHeight);
     glViewport(0, 0, viewportWidth, viewportHeight);
@@ -68,8 +68,8 @@ int main()
 
    
 
-    Shader lightningShader(getResourcePath("shaders/colors.vert").c_str(), getResourcePath("shaders/colors.frag").c_str());
-    Shader lightCubeShader(getResourcePath("shaders/lightcube.vert").c_str(), getResourcePath("shaders/lightcube.frag").c_str());
+    Shader lightningShader(getResourcePath("shaders/basicLightning.vert").c_str(), getResourcePath("shaders/basicLightning.frag").c_str());
+    Shader lightCubeShader(getResourcePath("shaders/lightCube.vert").c_str(), getResourcePath("shaders/lightCube.frag").c_str());
 
     // Set up vertex data (and buffer(s)) and attribute pointers
     // We add a new set of vertices to form a second triangle (a total of 6 vertices); the vertex attribute configuration remains the same (still one 3-float position vector per vertex)
@@ -80,7 +80,7 @@ int main()
          0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
         -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
         -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 
-    
+
         -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
          0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
          0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
@@ -148,38 +148,43 @@ int main()
 
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
         Utils::SetDeltaTime(deltaTime);
+        lastFrame = currentFrame;
 
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
+        // input
+        // -----
         cam->HandleInput(window);
         cam->Update();
 
+        // render
+        // ------
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // be sure to activate shader when setting uniforms/drawing objects
         lightningShader.use();
         lightningShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
-        lightningShader.setVec3("lightColor",  1.0f, 1.0f, 1.0f);
-        lightningShader.setVec3("lightPos", lightPos); 
+        lightningShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+        lightningShader.setVec3("lightPos", lightPos);
 
-        glm::mat4 trans = glm::mat4(1.0f);
-        trans = glm::translate(trans, glm::vec3(0.0f, 0.0f, -3.0f));
-
-        
-
+        // view/projection transformations
         glm::mat4 projection = glm::perspective(glm::radians(cam->GetFov()), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
         glm::mat4 view = cam->GetView();
-        view = trans * view;
         lightningShader.setMat4("projection", projection);
         lightningShader.setMat4("view", view);
 
+        // world transformation
         glm::mat4 model = glm::mat4(1.0f);
         lightningShader.setMat4("model", model);
 
+        // render the cube
         glBindVertexArray(cubeVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
-        lightCubeShader.use();
+
+        // also draw the lamp object
+        lightCubeShader.use(); 
+        
         lightCubeShader.setMat4("projection", projection);
         lightCubeShader.setMat4("view", view);
         model = glm::mat4(1.0f);
@@ -187,13 +192,12 @@ int main()
         model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
         lightCubeShader.setMat4("model", model);
 
-        glBindVertexArray(lightCubeVAO);
+        glBindVertexArray(lightCubeVAO);        
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
 
-        glBindVertexArray(0);
-
-        // Swap the screen buffers
+        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+        // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
