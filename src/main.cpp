@@ -74,47 +74,47 @@ int main()
     // Set up vertex data (and buffer(s)) and attribute pointers
     // We add a new set of vertices to form a second triangle (a total of 6 vertices); the vertex attribute configuration remains the same (still one 3-float position vector per vertex)
     float vertices[] = {
-        -0.5f, -0.5f, -0.5f, 
-         0.5f, -0.5f, -0.5f,   
-         0.5f,  0.5f, -0.5f,   
-         0.5f,  0.5f, -0.5f,   
-        -0.5f,  0.5f, -0.5f,   
-        -0.5f, -0.5f, -0.5f,   
+        -0.5f, -0.5f, -0.5f, 1.0f, 0.f, 0.f,
+         0.5f, -0.5f, -0.5f, 1.0f, 0.f, 0.f,
+         0.5f,  0.5f, -0.5f, 1.0f, 0.f, 0.f,
+         0.5f,  0.5f, -0.5f, 1.0f, 0.f, 0.f,
+        -0.5f,  0.5f, -0.5f, 1.0f, 0.f, 0.f,
+        -0.5f, -0.5f, -0.5f, 1.0f, 0.f, 0.f,
 
-        -0.5f, -0.5f,  0.5f,  
-         0.5f, -0.5f,  0.5f,  
-         0.5f,  0.5f,  0.5f,  
-         0.5f,  0.5f,  0.5f,  
-        -0.5f,  0.5f,  0.5f,  
-        -0.5f, -0.5f,  0.5f,  
+        -0.5f, -0.5f,  0.5f, 0.0f, 1.f, 0.f,
+         0.5f, -0.5f,  0.5f, 0.0f, 1.f, 0.f,
+         0.5f,  0.5f,  0.5f, 0.0f, 1.f, 0.f,
+         0.5f,  0.5f,  0.5f, 0.0f, 1.f, 0.f,
+        -0.5f,  0.5f,  0.5f, 0.0f, 1.f, 0.f,
+        -0.5f, -0.5f,  0.5f, 0.0f, 1.f, 0.f,
     
-        -0.5f,  0.5f,  0.5f, 
-        -0.5f,  0.5f, -0.5f, 
-        -0.5f, -0.5f, -0.5f, 
-        -0.5f, -0.5f, -0.5f, 
-        -0.5f, -0.5f,  0.5f, 
-        -0.5f,  0.5f,  0.5f, 
+        -0.5f,  0.5f,  0.5f, 0.0f, 0.f, 1.f,
+        -0.5f,  0.5f, -0.5f, 0.0f, 0.f, 1.f,
+        -0.5f, -0.5f, -0.5f, 0.0f, 0.f, 1.f,
+        -0.5f, -0.5f, -0.5f, 0.0f, 0.f, 1.f,
+        -0.5f, -0.5f,  0.5f, 0.0f, 0.f, 1.f,
+        -0.5f,  0.5f,  0.5f, 0.0f, 0.f, 1.f,
     
-         0.5f,  0.5f,  0.5f, 
-         0.5f,  0.5f, -0.5f, 
-         0.5f, -0.5f, -0.5f, 
-         0.5f, -0.5f, -0.5f, 
-         0.5f, -0.5f,  0.5f, 
-         0.5f,  0.5f,  0.5f, 
+         0.5f,  0.5f,  0.5f, 1.0f, 0.f, 1.f,
+         0.5f,  0.5f, -0.5f, 1.0f, 0.f, 1.f,
+         0.5f, -0.5f, -0.5f, 1.0f, 0.f, 1.f,
+         0.5f, -0.5f, -0.5f, 1.0f, 0.f, 1.f,
+         0.5f, -0.5f,  0.5f, 1.0f, 0.f, 1.f,
+         0.5f,  0.5f,  0.5f, 1.0f, 0.f, 1.f,
     
-        -0.5f, -0.5f, -0.5f, 
-         0.5f, -0.5f, -0.5f, 
-         0.5f, -0.5f,  0.5f, 
-         0.5f, -0.5f,  0.5f, 
-        -0.5f, -0.5f,  0.5f, 
-        -0.5f, -0.5f, -0.5f, 
+        -0.5f, -0.5f, -0.5f, 0.0f, 1.f, 1.f,
+         0.5f, -0.5f, -0.5f, 0.0f, 1.f, 1.f,
+         0.5f, -0.5f,  0.5f, 0.0f, 1.f, 1.f,
+         0.5f, -0.5f,  0.5f, 0.0f, 1.f, 1.f,
+        -0.5f, -0.5f,  0.5f, 0.0f, 1.f, 1.f,
+        -0.5f, -0.5f, -0.5f, 0.0f, 1.f, 1.f,
     
-        -0.5f,  0.5f, -0.5f,  
-         0.5f,  0.5f, -0.5f,  
-         0.5f,  0.5f,  0.5f,  
-         0.5f,  0.5f,  0.5f,  
-        -0.5f,  0.5f,  0.5f,  
-        -0.5f,  0.5f, -0.5f, 
+        -0.5f,  0.5f, -0.5f, 0.0f, 1.f, 1.f,
+         0.5f,  0.5f, -0.5f, 0.0f, 1.f, 1.f,
+         0.5f,  0.5f,  0.5f, 0.0f, 1.f, 1.f,
+         0.5f,  0.5f,  0.5f, 0.0f, 1.f, 1.f,
+        -0.5f,  0.5f,  0.5f, 0.0f, 1.f, 1.f,
+        -0.5f,  0.5f, -0.5f, 0.0f, 1.f, 1.f,
     };
 
     float triVert[] = {
@@ -131,16 +131,19 @@ int main()
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(triVert), triVert, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, false, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 3, GL_FLOAT, false, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
     
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
 
-
+    Logger::Log("something", 3, 3, 3, 3, 3, "aohsdsdf");
 
 
    Logger::Log(sizeof(vertices) / (sizeof(float) * 3));
@@ -160,27 +163,30 @@ int main()
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        
+
        lightningShader.use();
 
        glm::mat4 projection = glm::mat4(1.0f);
        projection = glm::perspective(glm::radians(45.0f), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
 
        glm::mat4 view = glm::mat4(1.0f);
-       view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.f)); 
-      
+       view = glm::translate(view, glm::vec3((float)(sin(glfwGetTime())), (float)(sin(glfwGetTime())), -3.f)); 
+       
        glm::mat4 model = glm::mat4(1.0f);
-       model = glm::rotate(model, glm::radians((float)glfwGetTime() * 80), glm::vec3(1.0f, 1.0f, 1.0f)); 
+       model = glm::rotate(model, glm::radians((float)glfwGetTime() * 40), glm::vec3(1.f, 1.f, 1.f)); 
+
+      
 
        //glm::vec4 colors = glm::vec4((float)sin(glfwGetTime() * 2), (float)sin(glfwGetTime() * 3), (float)sin(glfwGetTime() * 3), 1.f);
 
-       glm::vec4 colors= glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
+       glm::vec4 colors= glm::vec4((float)sin(glfwGetTime() * 2), (float)sin(glfwGetTime() * 3), (float)sin(glfwGetTime() * 4), 1.0f);
        lightningShader.setMat4("view", view);
        lightningShader.setMat4("projection", projection);
        lightningShader.setMat4("model", model);
-       lightningShader.setVec4("u_Colors", colors);
 
        glBindVertexArray(VAO);
-       glDrawArrays(GL_TRIANGLES, 0, 3);   
+       glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (6 * sizeof(float)));   
 
         glfwSwapBuffers(window);
         glfwPollEvents();
