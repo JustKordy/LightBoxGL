@@ -69,52 +69,54 @@ int main()
    
 
     Shader lightningShader(getResourcePath("shaders/basicLightning.vert").c_str(), getResourcePath("shaders/basicLightning.frag").c_str());
+    Shader lightCubeShader(getResourcePath("shaders/lightcube.vert").c_str(), getResourcePath("shaders/lightcube.frag").c_str());
    
 
     // Set up vertex data (and buffer(s)) and attribute pointers
     // We add a new set of vertices to form a second triangle (a total of 6 vertices); the vertex attribute configuration remains the same (still one 3-float position vector per vertex)
     float vertices[] = {
-        -0.5f, -0.5f, -0.5f, 1.0f, 0.f, 0.f,
-         0.5f, -0.5f, -0.5f, 1.0f, 0.f, 0.f,
-         0.5f,  0.5f, -0.5f, 1.0f, 0.f, 0.f,
-         0.5f,  0.5f, -0.5f, 1.0f, 0.f, 0.f,
-        -0.5f,  0.5f, -0.5f, 1.0f, 0.f, 0.f,
-        -0.5f, -0.5f, -0.5f, 1.0f, 0.f, 0.f,
+        // positions          // normals           // texture coords
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
 
-        -0.5f, -0.5f,  0.5f, 0.0f, 1.f, 0.f,
-         0.5f, -0.5f,  0.5f, 0.0f, 1.f, 0.f,
-         0.5f,  0.5f,  0.5f, 0.0f, 1.f, 0.f,
-         0.5f,  0.5f,  0.5f, 0.0f, 1.f, 0.f,
-        -0.5f,  0.5f,  0.5f, 0.0f, 1.f, 0.f,
-        -0.5f, -0.5f,  0.5f, 0.0f, 1.f, 0.f,
-    
-        -0.5f,  0.5f,  0.5f, 0.0f, 0.f, 1.f,
-        -0.5f,  0.5f, -0.5f, 0.0f, 0.f, 1.f,
-        -0.5f, -0.5f, -0.5f, 0.0f, 0.f, 1.f,
-        -0.5f, -0.5f, -0.5f, 0.0f, 0.f, 1.f,
-        -0.5f, -0.5f,  0.5f, 0.0f, 0.f, 1.f,
-        -0.5f,  0.5f,  0.5f, 0.0f, 0.f, 1.f,
-    
-         0.5f,  0.5f,  0.5f, 1.0f, 0.f, 1.f,
-         0.5f,  0.5f, -0.5f, 1.0f, 0.f, 1.f,
-         0.5f, -0.5f, -0.5f, 1.0f, 0.f, 1.f,
-         0.5f, -0.5f, -0.5f, 1.0f, 0.f, 1.f,
-         0.5f, -0.5f,  0.5f, 1.0f, 0.f, 1.f,
-         0.5f,  0.5f,  0.5f, 1.0f, 0.f, 1.f,
-    
-        -0.5f, -0.5f, -0.5f, 0.0f, 1.f, 1.f,
-         0.5f, -0.5f, -0.5f, 0.0f, 1.f, 1.f,
-         0.5f, -0.5f,  0.5f, 0.0f, 1.f, 1.f,
-         0.5f, -0.5f,  0.5f, 0.0f, 1.f, 1.f,
-        -0.5f, -0.5f,  0.5f, 0.0f, 1.f, 1.f,
-        -0.5f, -0.5f, -0.5f, 0.0f, 1.f, 1.f,
-    
-        -0.5f,  0.5f, -0.5f, 0.0f, 1.f, 1.f,
-         0.5f,  0.5f, -0.5f, 0.0f, 1.f, 1.f,
-         0.5f,  0.5f,  0.5f, 0.0f, 1.f, 1.f,
-         0.5f,  0.5f,  0.5f, 0.0f, 1.f, 1.f,
-        -0.5f,  0.5f,  0.5f, 0.0f, 1.f, 1.f,
-        -0.5f,  0.5f, -0.5f, 0.0f, 1.f, 1.f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
+
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
     };
 
     float triVert[] = {
@@ -123,30 +125,33 @@ int main()
         -0.5f, -0.5f,  0.0f
     };
 
-    unsigned int VBO, VAO;
-
-    glGenVertexArrays(1, &VAO);
+    unsigned int VBO, cubeVAO;
+    glGenVertexArrays(1, &cubeVAO);
     glGenBuffers(1, &VBO);
-
-    glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, false, 6 * sizeof(float), (void*)0);
+    glBindVertexArray(cubeVAO);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-
-    glVertexAttribPointer(1, 3, GL_FLOAT, false, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
 
-    Logger::Log("something", 3, 3, 3, 3, 3, "aohsdsdf");
 
+    // second, configure the light's VAO (VBO stays the same; the vertices are the same for the light object which is also a 3D cube)
+    unsigned int lightCubeVAO;
+    glGenVertexArrays(1, &lightCubeVAO);
+    glBindVertexArray(lightCubeVAO);
 
-   Logger::Log(sizeof(vertices) / (sizeof(float) * 3));
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    // note that we update the lamp's position attribute's stride to reflect the updated buffer data
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
 
 
    
@@ -163,31 +168,67 @@ int main()
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        cam->HandleInput(window);
+        cam->Update();
+
+        // be sure to activate shader when setting uniforms/drawing objects
+        lightningShader.use();
+        lightningShader.setVec3("objectColor", 1.0f, 1.f, 0.31f);
+        lightningShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+        lightningShader.setVec3("lightPos", lightPos);
+        lightningShader.setVec3("viewPos", cam->GetPosition());
+
+        lightningShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
+        lightningShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
+        lightningShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
+        lightningShader.setFloat("material.shininess", 32.0f);
+
+        glm::vec3 lightColor;
+        lightColor.x = sin(glfwGetTime() * 2.0f);
+        lightColor.y = sin(glfwGetTime() * 0.7f);
+        lightColor.z = sin(glfwGetTime() * 1.3f);
+
+        glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
+        glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
+
+        lightningShader.setVec3("light.ambient", ambientColor);
+        lightningShader.setVec3("light.diffuse", diffuseColor);
+
+
+        lightningShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+
+        // view/projection transformations
+        glm::mat4 projection = glm::perspective(glm::radians(cam->GetFov()), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
+        glm::mat4 view = cam->GetView();
         
+        lightningShader.setMat4("projection", projection);
+        lightningShader.setMat4("view", view);
 
-       lightningShader.use();
+        // world transformation
+        glm::mat4 model = glm::mat4(1.0f);
+        lightningShader.setMat4("model", model);
 
-       glm::mat4 projection = glm::mat4(1.0f);
-       projection = glm::perspective(glm::radians(45.0f), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
+        // render the cube
+        glBindVertexArray(cubeVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
-       glm::mat4 view = glm::mat4(1.0f);
-       view = glm::translate(view, glm::vec3((float)(sin(glfwGetTime())), (float)(sin(glfwGetTime())), -3.f)); 
-       
-       glm::mat4 model = glm::mat4(1.0f);
-       model = glm::rotate(model, glm::radians((float)glfwGetTime() * 40), glm::vec3(1.f, 1.f, 1.f)); 
 
-      
+        // also draw the lamp object
+        lightCubeShader.use();
+        lightCubeShader.setMat4("projection", projection);
+        lightCubeShader.setMat4("view", view);
+        
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, lightPos);
+        model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
+        lightCubeShader.setMat4("model", model);
 
-       //glm::vec4 colors = glm::vec4((float)sin(glfwGetTime() * 2), (float)sin(glfwGetTime() * 3), (float)sin(glfwGetTime() * 3), 1.f);
+        glBindVertexArray(lightCubeVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
-       glm::vec4 colors= glm::vec4((float)sin(glfwGetTime() * 2), (float)sin(glfwGetTime() * 3), (float)sin(glfwGetTime() * 4), 1.0f);
-       lightningShader.setMat4("view", view);
-       lightningShader.setMat4("projection", projection);
-       lightningShader.setMat4("model", model);
 
-       glBindVertexArray(VAO);
-       glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (6 * sizeof(float)));   
-
+        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+        // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
@@ -200,6 +241,15 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);  
+    if (key == GLFW_KEY_G && action == GLFW_PRESS)
+        lightPos.x += 0.2f;
+    if (key == GLFW_KEY_H && action == GLFW_PRESS)
+        lightPos.x -= 0.2f;
+    if (key == GLFW_KEY_J && action == GLFW_PRESS)
+        lightPos.y += 0.2f;
+    if (key == GLFW_KEY_K && action == GLFW_PRESS)
+        lightPos.y -= 0.2f;
+
 }
 
 std::string getResourcePath(const std::string &filename)
