@@ -1,9 +1,13 @@
 #pragma once
+
+
+
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 900
 
 #define SCREEN_WIDTH_HALF (SCREEN_WIDTH / 2)
 #define SCREEN_HEIGHT_HALF (SCREEN_HEIGHT / 2)
+
 
 class Utils
 {
@@ -24,6 +28,8 @@ public:
     static void SetMouseClicked(const bool& state) {
         MouseClicked = state;
     }
+
+    static unsigned int LoadTexture(char const* path);
 
 private: 
     static float m_DeltaTime;

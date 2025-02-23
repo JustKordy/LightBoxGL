@@ -1,15 +1,13 @@
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image/stb_image.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <GL/glew.h>
+#include "Utils/Utils.h"
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include "Logger/Logger.h"
 #include "Shader/Shader.h"
 #include "Camera/Camera.h"
-#include "Utils/Utils.h"
 
 
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
@@ -150,11 +148,18 @@ int main()
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     // note that we update the lamp's position attribute's stride to reflect the updated buffer data
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
 
-   
+    unsigned int diffuseMap = Utils::LoadTexture(getResourcePath("container2.png").c_str());
+    unsigned int specularMap = Utils::LoadTexture(getResourcePath("container2_specular.png").c_str());
+    unsigned int emissionMap = Utils::LoadTexture(getResourcePath("container2_emission.png").c_str());
+
+    lightningShader.use();
+    lightningShader.setInt("material.diffuse", 0);
+    lightningShader.setInt("material.specular", 1);
+    lightningShader.setInt("material.emission", 2);
     
     // Game loop
     while (!glfwWindowShouldClose(window))
@@ -173,29 +178,17 @@ int main()
 
         // be sure to activate shader when setting uniforms/drawing objects
         lightningShader.use();
-        lightningShader.setVec3("objectColor", 1.0f, 1.f, 0.31f);
-        lightningShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-        lightningShader.setVec3("lightPos", lightPos);
+        lightningShader.setVec3("light.position", lightPos);
+       
         lightningShader.setVec3("viewPos", cam->GetPosition());
 
-        lightningShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
-        lightningShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
-        lightningShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
-        lightningShader.setFloat("material.shininess", 32.0f);
-
-        glm::vec3 lightColor;
-        lightColor.x = sin(glfwGetTime() * 2.0f);
-        lightColor.y = sin(glfwGetTime() * 0.7f);
-        lightColor.z = sin(glfwGetTime() * 1.3f);
-
-        glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
-        glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
-
-        lightningShader.setVec3("light.ambient", ambientColor);
-        lightningShader.setVec3("light.diffuse", diffuseColor);
-
-
+        
+        lightningShader.setFloat("material.shininess", 64.0f);
+        
+        lightningShader.setVec3("light.ambient", 0.4f, 0.4f, 0.4f);
+        lightningShader.setVec3("light.diffuse", 0.9f, 0.9f, 0.9f);
         lightningShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+
 
         // view/projection transformations
         glm::mat4 projection = glm::perspective(glm::radians(cam->GetFov()), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
@@ -208,10 +201,19 @@ int main()
         glm::mat4 model = glm::mat4(1.0f);
         lightningShader.setMat4("model", model);
 
-        // render the cube
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, diffuseMap);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, specularMap);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, emissionMap);
+
+       
         glBindVertexArray(cubeVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
+        
+        // render the cube
 
         // also draw the lamp object
         lightCubeShader.use();
