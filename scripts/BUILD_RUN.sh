@@ -7,6 +7,8 @@ if [ ! -d "build" ]; then
     mkdir build
 fi
 
+brew install glew glfw glm
+
 echo "Running CMake Configuration..."
 cmake -B build -G "Unix Makefiles"
 

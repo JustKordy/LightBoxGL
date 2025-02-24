@@ -13,13 +13,12 @@ if(WIN32)
     set(GLEW_LIB glew32.lib)
 
 elseif(APPLE)
-    set(VENDOR_PATH "vendor/")
-    include_directories(${VENDOR_PATH}/mac/include)
-    link_directories(${VENDOR_PATH}/mac/lib)
-    set(GLFW_LIB libglfw3.a)
-    set(GLEW_LIB libGLEW.a)
-    set(LIBS "-framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo")
-   
+    set(BREW_PATH "/opt/homebrew")
+    include_directories(${BREW_PATH}/include)
+    link_directories(${BREW_PATH}/lib)
+    set(GLFW_LIB glfw)
+    set(GLEW_LIB glew)
+    
 endif()
 
 add_executable(MyProject
@@ -29,7 +28,7 @@ src/Camera/Camera.cpp
 src/Utils/Utils.cpp
 
 
-src/Camera/Camera.h 
+src/Camera/Camera.h     
 src/Shader/Shader.h 
 src/Utils/Utils.h 
 
@@ -37,4 +36,4 @@ src/Utils/Utils.h
 
 target_compile_definitions(MyProject PRIVATE PROJECT_ROOT_DIR="${CMAKE_SOURCE_DIR}")
 
-target_link_libraries(MyProject ${LIBS} ${GLFW_LIB} ${GLEW_LIB})
+target_link_libraries(MyProject OpenGL::GL ${GLFW_LIB} ${GLEW_LIB})
