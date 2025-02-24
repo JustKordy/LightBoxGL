@@ -1,5 +1,5 @@
 #pragma once
-
+#include <string>
 
 
 #define SCREEN_WIDTH 1280
@@ -30,6 +30,8 @@ public:
     }
 
     static unsigned int LoadTexture(char const* path);
+
+    static std::string GetResourcePath(const std::string& file);
 
 private: 
     static float m_DeltaTime;

@@ -44,3 +44,9 @@ unsigned int Utils::LoadTexture(const char* path) {
 
     return textureID;
 }
+
+std::string Utils::GetResourcePath(const std::string &file)
+{
+    return std::string(PROJECT_ROOT_DIR) + "/resources/" + file;
+    Logger::Log(PROJECT_ROOT_DIR);
+}

@@ -3,12 +3,9 @@ project(MyProject)
 
 set(CMAKE_CXX_STANDARD 17)
 
-# Find OpenGL
 find_package(OpenGL REQUIRED)
 
-# GLFW and GLEW
 if(WIN32)
-    # Use vcpkg
     set(VCPKG_PATH "C:\\Users\\Kordys\\Desktop\\All\\vcpkg\\vcpkg\\installed\\x64-windows")
     include_directories(${VCPKG_PATH}/include)
     link_directories(${VCPKG_PATH}/lib)
@@ -16,15 +13,15 @@ if(WIN32)
     set(GLEW_LIB glew32.lib)
 
 elseif(APPLE)
-    # Use Homebrew
-    set(HOMEBREW_PATH "/opt/homebrew")
-    include_directories(${HOMEBREW_PATH}/include)
-    link_directories(${HOMEBREW_PATH}/lib)
-    set(GLFW_LIB glfw)
-    set(GLEW_LIB glew)
+    set(VENDOR_PATH "vendor/")
+    include_directories(${VENDOR_PATH}/mac/include)
+    link_directories(${VENDOR_PATH}/mac/lib)
+    set(GLFW_LIB libglfw3.a)
+    set(GLEW_LIB libGLEW.a)
+    set(LIBS "-framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo")
+   
 endif()
 
-# Add executable
 add_executable(MyProject
 src/main.cpp
 src/Shader/Shader.cpp
@@ -38,9 +35,6 @@ src/Utils/Utils.h
 
 )
 
-
-# Add the PROJECT_ROOT_DIR definition
 target_compile_definitions(MyProject PRIVATE PROJECT_ROOT_DIR="${CMAKE_SOURCE_DIR}")
 
-# Link libraries
-target_link_libraries(MyProject OpenGL::GL ${GLFW_LIB} ${GLEW_LIB})
+target_link_libraries(MyProject ${LIBS} ${GLFW_LIB} ${GLEW_LIB})
