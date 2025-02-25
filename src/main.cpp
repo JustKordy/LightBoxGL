@@ -8,6 +8,9 @@
 #include "Logger/Logger.h"
 #include "Shader/Shader.h"
 #include "Camera/Camera.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
 
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
@@ -18,6 +21,16 @@ void mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
 
 float deltaTime = 0.0f; 
 float lastFrame = 0.0f;
+double lastTime = 0.0;  
+int frameCount = 0;  
+double fps = 0.0;   
+
+ // imgui variables after this comment --->
+
+ float imBackColor[4] = {0.1f, 0.1f, 0.1f, 1.0f};
+ float imMaterialShininess = 64.f;
+ glm::vec3 imLightColor(0.9f);
+ 
 
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
@@ -138,6 +151,16 @@ int main()
     lightningShader.setInt("material.specular", 1);
     lightningShader.setInt("material.emission", 2);
 
+
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    ImGui::StyleColorsDark();
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 330");
+
+   
+
     while (!glfwWindowShouldClose(window))
     { 
         float currentFrame = static_cast<float>(glfwGetTime());
@@ -145,8 +168,25 @@ int main()
         Utils::SetDeltaTime(deltaTime);
         lastFrame = currentFrame;
 
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        double currentTime = glfwGetTime();
+        frameCount++;
+
+        if (currentTime - lastTime >= 1.0) 
+        {
+            fps = frameCount; 
+            frameCount = 0; 
+            lastTime = currentTime;
+        }
+
+        glClearColor(imBackColor[0], imBackColor[1], imBackColor[2], imBackColor[3]);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+      
+
 
         cam->HandleInput(window);
         cam->Update();
@@ -157,11 +197,11 @@ int main()
         lightningShader.setVec3("viewPos", cam->GetPosition());
 
         
-        lightningShader.setFloat("material.shininess", 64.0f);
+        lightningShader.setFloat("material.shininess", imMaterialShininess);
         
         lightningShader.setVec3("light.ambient", 0.4f, 0.4f, 0.4f);
-        lightningShader.setVec3("light.diffuse", 0.9f, 0.9f, 0.9f);
-        lightningShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+        lightningShader.setVec3("light.diffuse", imLightColor);
+        lightningShader.setVec3("light.specular", imLightColor);
 
         glm::mat4 projection = glm::perspective(glm::radians(cam->GetFov()), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
         glm::mat4 view = cam->GetView();
@@ -184,6 +224,7 @@ int main()
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
         lightCubeShader.use();
+        lightCubeShader.setVec3("lightColor", imLightColor);
         lightCubeShader.setMat4("projection", projection);
         lightCubeShader.setMat4("view", view);
         
@@ -195,9 +236,31 @@ int main()
         glBindVertexArray(lightCubeVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
+
+        ImGui::Begin("Window");
+        ImGui::SeparatorText("FPS");
+        ImGui::Text("FPS: %.0f", fps);
+        ImGui::SeparatorText("Background color");
+        ImGui::ColorEdit4("Color", imBackColor);
+        ImGui::SeparatorText("Light Position");
+        ImGui::SliderFloat3("(X, Y, Z)", glm::value_ptr(lightPos), -10.f, 10.0f);
+        ImGui::Text("Material");
+        ImGui::Separator();
+        ImGui::SeparatorText("Shininess");
+        ImGui::SliderFloat("Value", &imMaterialShininess, 0.f, 256.f);
+        ImGui::SeparatorText("Light color");
+        ImGui::ColorEdit3("color", glm::value_ptr(imLightColor));
+        ImGui::End();
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
  
     glfwTerminate();
     return 0;
@@ -205,6 +268,8 @@ int main()
 
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode)
 {
+    if (ImGui::GetIO().WantCaptureMouse)
+        return;
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);  
     if (key == GLFW_KEY_G && action == GLFW_PRESS)
@@ -225,11 +290,15 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 
 void mouse_callback(GLFWwindow *window, double xposIn, double yposIn)
 {
+    if (ImGui::GetIO().WantCaptureMouse)
+        return;
     cam->HandleLook(xposIn, yposIn, Utils::isMouseClicked());
 }
 
 void mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
 {
+    if (ImGui::GetIO().WantCaptureMouse)
+        return;
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
         Utils::SetMouseClicked(true);
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
@@ -238,5 +307,7 @@ void mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
 
 void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
 {
+    if (ImGui::GetIO().WantCaptureMouse)
+        return;
     cam->HandleZoom(yoffset);
 }

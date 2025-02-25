@@ -26,18 +26,9 @@ elseif(APPLE)
     
 endif()
 
-add_executable(MyProject
-src/main.cpp
-src/Shader/Shader.cpp
-src/Camera/Camera.cpp
-src/Utils/Utils.cpp
+file(GLOB_RECURSE SRC_FILES "src/*.cpp" "src/*.h")
 
-
-src/Camera/Camera.h     
-src/Shader/Shader.h 
-src/Utils/Utils.h 
-
-)
+add_executable(MyProject ${SRC_FILES})
 
 target_compile_definitions(MyProject PRIVATE PROJECT_ROOT_DIR="${CMAKE_SOURCE_DIR}")
 
