@@ -42,7 +42,6 @@ private:
 
     bool m_FirstMouse = true;
     float m_CameraSpeed = 0.5f;
-    // euler angles
     float m_Yaw = -90.0f; 
     float m_Pitch = 0.0f;
 

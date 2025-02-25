@@ -37,7 +37,6 @@ void Camera::HandleLook(double xposIn, double yposIn, bool mouseClicked)
 {
     if (mouseClicked)
     {
-        // Convert screen coordinates to relative movement
         float inPosX = xposIn - SCREEN_WIDTH_HALF;
         float inPosY = yposIn - SCREEN_HEIGHT_HALF;
 
@@ -49,7 +48,7 @@ void Camera::HandleLook(double xposIn, double yposIn, bool mouseClicked)
         }
 
         float xoffset = inPosX - m_LastX;
-        float yoffset = m_LastY - inPosY; // Inverted Y-axis
+        float yoffset = m_LastY - inPosY; 
 
         m_LastX = inPosX;
         m_LastY = inPosY;
@@ -61,13 +60,11 @@ void Camera::HandleLook(double xposIn, double yposIn, bool mouseClicked)
         m_Yaw += xoffset;
         m_Pitch += yoffset;
 
-        // Clamp the pitch to avoid screen flip
         if (m_Pitch > 89.0f)
             m_Pitch = 89.0f;
         if (m_Pitch < -89.0f)
             m_Pitch = -89.0f;
 
-        // Update the camera front vector based on yaw and pitch
         glm::vec3 front;
         front.x = cos(glm::radians(m_Yaw)) * cos(glm::radians(m_Pitch));
         front.y = sin(glm::radians(m_Pitch));
